@@ -1,9 +1,12 @@
+const fs = require('fs')
 const axios = require('axios')
 
 class Busquedas {
-  historial = ['Guadalajara', 'Manzanillo', 'Monterrey', 'New York']
+  historial = []
+  rutaDB = './db/database.json'
 
   constructor() {
+    this.leerDB()
   }
 
   get paramsMapbox() {
@@ -19,6 +22,15 @@ class Busquedas {
       units: 'metric',
       lang: 'es'
     }
+  }
+
+  get historialCapitalizado() {
+    return this.historial.map(item => {
+      let palabras = item.split(' ')
+      palabras = palabras.map(palabra => palabra[0].toUpperCase() + palabra.substr(1))
+
+      return palabras.join(' ')
+    })
   }
 
   async ciudad(lugar = '') {
@@ -60,6 +72,34 @@ class Busquedas {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  agregarHistorial( lugar = '' ) {
+    if ( this.historial.includes( lugar.toLowerCase() ) ) {
+      return
+    }
+
+    this.historial = this.historial.splice(0, 5)
+
+    this.historial.unshift( lugar.toLowerCase() )
+    this.guardarDB()
+  }
+
+  guardarDB() {
+    const payload = {
+      historial: this.historial
+    }
+
+    fs.writeFileSync(this.rutaDB, JSON.stringify(payload))
+  }
+
+  leerDB() {
+    if ( !fs.existsSync(this.rutaDB) ) return
+
+    const info = fs.readFileSync(this.rutaDB, {encondig: 'utf-8'})
+    const data = JSON.parse(info)
+
+    this.historial = data.historial
   }
 }
 

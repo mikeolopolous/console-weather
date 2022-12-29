@@ -20,8 +20,13 @@ const main = async() => {
       case 1:
         const buscar = await leerInput('Ciudad: ')
         const lugares = await busquedas.ciudad(buscar)
+
         const id = await listarLugares(lugares)
+        if (id === '0') continue
+
         const lugarSeleccionado = lugares.find(lugar => lugar.id === id)
+        busquedas.agregarHistorial(lugarSeleccionado.nombre)
+
         const clima = await busquedas.climaLugarSeleccionado(lugarSeleccionado.lat, lugarSeleccionado.lng)
 
         console.clear()
@@ -36,10 +41,10 @@ const main = async() => {
         console.log('Descripción:'.cyan, clima.desc.magenta)
       break
       case 2:
-        console.log('Opcion 2')
-      break
-      case 0:
-        console.log('Salir')
+        busquedas.historialCapitalizado.forEach((lugar, index) => {
+          const indice = `${index + 1}.`.cyan
+          console.log(`${indice} ${lugar}`)
+        })
       break
     }
 
