@@ -8,31 +8,15 @@ const preguntas = [
     message: '¿Qué desea hacer?',
     choices: [
       {
-        value: '1',
-        name: `${'1.'.magenta} Crear tarea`
+        value: 1,
+        name: `${'1.'.magenta} Buscar ciudad`
       },
       {
-        value: '2',
-        name: `${'2.'.magenta} Listar tareas`
+        value: 2,
+        name: `${'2.'.magenta} Historial`
       },
       {
-        value: '3',
-        name: `${'3.'.magenta} Listar tareas completadas`
-      },
-      {
-        value: '4',
-        name: `${'4.'.magenta} Listar tareas pendientes`
-      },
-      {
-        value: '5',
-        name: `${'5.'.magenta} Completar tarea(s)`
-      },
-      {
-        value: '6',
-        name: `${'6.'.magenta} Borrar tarea`
-      },
-      {
-        value: '0',
+        value: 0,
         name: `${'0.'.magenta} Salir`
       }
     ]
@@ -81,13 +65,13 @@ const leerInput = async( message ) => {
   return desc
 }
 
-const listadoTareasBorrar = async( tareas = [] ) => {
-  const choices = tareas.map((tarea, index) => {
+const listarLugares = async( lugares = [] ) => {
+  const choices = lugares.map((lugar, index) => {
     const indice = `${index + 1}.`.magenta
 
     return {
-      value: tarea.id,
-      name: `${indice} ${tarea.desc}`
+      value: lugar.id,
+      name: `${indice} ${lugar.nombre}`
     }
   })
 
@@ -100,7 +84,7 @@ const listadoTareasBorrar = async( tareas = [] ) => {
     {
       type: 'list',
       name: 'id',
-      message: 'Borrar',
+      message: 'Selecciona un lugar',
       choices
     }
   ]
@@ -150,7 +134,7 @@ module.exports = {
   inquirerMenu,
   pausa,
   leerInput,
-  listadoTareasBorrar,
+  listarLugares,
   confirmar,
   mostrarListadoChecklist
 }
